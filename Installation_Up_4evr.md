@@ -3,15 +3,16 @@
 Github Flavored Markup での表示確認のため、編集には https://stackedit.io/# を使用しました。
 
 ---------
-At work I recently had to set up a four installations of different configurations that would need to run all day, every day, 24 hours a day for a couple months with as few crashes or glitches as possible and without anyone going to check on them. This is something that a lot of media artists need to do all the time, and there are a bunch of different tricks and tips to keeping things up for an extended period, I figured I’d share my findings. There are alternate ways to do many of these tasks and this is only one road so please share some tips you’ve picked up out in the field down in the comments box below.
+私は最近案件で、2ヶ月間毎日24時間、できる限り最小限のクラッシュやグリッチで動作し続け、かつ人の監視の要らない、異なる構成の4つのインスタレーションをセットアップしなければなりませんでした。これは幾人ものメディア・アーティストたちがいつも必ず行うもので、そこには長期運用におけるたくさんの異なるトリックやヒントが存在します。私は自分の発見を共有したいと考えました。
+ここに記すのはひとつのやり方であり、それぞれに代替となる方法があります。あなたが現場で見つけたヒントをぜひ下のコメント欄で共有してください。
 
 I had to do several searches in a couple different places to find all the information I needed to keep everything consistently up and bug free. Luckily most of the installations I was dealing with this time were fairly light in terms of resources and complications, but it’s always best practices to have a safety net.
 
-I usually run these off brand new, unboxed computers so this is sort of starting from scratch. Most of the things I point out are set to the opposite by default.
+通常は真新しい開梱したてのコンピューターを扱うため、この手順もゼロから始めます。私が指摘するもののほとんどは、初期状態では反対に設定されています。
 
-Tip: if you’re doing multiple computers, do these prep steps on one of them and just boot the others into target disk mode and use something like [Carbon Copy Cloner](http://www.bombich.com/) to mirror the first one on the next so everything is as consistent as possible.
+ヒント：もし複数のマシンで行う場合、まず1台目ですべてのステップを完了したあと、他のマシンをターゲットディスクモードで起動し [Carbon Copy Cloner](http://www.bombich.com/ja) などを使用して1台目の環境をミラーリングすることで可能な限り一貫性を保てます。
 
-**Step 1: Prep your software and the computer**
+**ステップ 1: ソフトウェアとコンピューターを準備しよう**
 -----------------------------------------------
 
 When building your software or whatever it might be, always keep the long running installation in mind. Plan which things will need to be adjusted by whoever is watching over the installation from the beginning (or at least don’t save it for the end). In my experience, keep it as simple as possible, so that it’s easy for the caretaker to get in there to fix or adjust what they need without opening Xcode and compiling or even exiting out of your app. Time you spend now to make things simple will save you hours of remote debugging when something breaks.
