@@ -15,6 +15,7 @@ I had to do several searches in a couple different places to find all the inform
 **ステップ 1: ソフトウェアとコンピューターを準備しよう**
 -----------------------------------------------
 
+
 When building your software or whatever it might be, always keep the long running installation in mind. Plan which things will need to be adjusted by whoever is watching over the installation from the beginning (or at least don’t save it for the end). In my experience, keep it as simple as possible, so that it’s easy for the caretaker to get in there to fix or adjust what they need without opening Xcode and compiling or even exiting out of your app. Time you spend now to make things simple will save you hours of remote debugging when something breaks.
 
 You’ll need to go through and turn off or disable several different automatic settings to keep things from popping up over top of your application. This can differ depending on whether you’re running 10.7, 10.8, 10.9, 10.10 etc etc.
@@ -23,15 +24,15 @@ Nick Hardeman has made a utility application for setting all of these attributes
 
 In System Preferences:
 
- - **Desktop and Screensaver:** Disable your screensaver. Set it’s time to “Never." I also suggest changing your desktop background to either black/a screenshot of your app/you client's logo - you can even set these to change automatically - remember - **it's not broken until someone notices** :)
- - **Energy Saver:** Turn Display Sleep and Computer Sleep to Never. Enable “Start up automatically after power failure” and “Restart automatically if the computer freezes” (these are only available in 10.7 and later)
- - **Users and Groups:** Go to Login Options (above the padlock) and enable "Automatic Login"
- - **Software update:** Disable automatic updates.
- - **Sharing:**  If you are running your main computer without a monitor or in an inaccessible area, don’t forget to turn on File sharing and Screen sharing. This will allow you to access the computer and control it if you're on the same network (optional if you’re concerned about security).
- - **Network:** If you don’t need remote access or don’t need Internet access for the installation, it’s not a bad idea to disable the Wifi so the “please select a wireless network” window doesn’t pop up when you least expect it. You can also turn off the option to ask you to join a new network if the proper one isn't found.
- - **Bluetooth** If running without a mouse or keyboard plugged in, sometimes you can get the annoying  ”Bluetooth keyboard/mouse setup” pop up over your application. You can temporality disable these by going to the advanced settings within the Bluetooth Preferences. See below for it’s location in 10.6.
- - **Security:** I would make sure that "Disable Automatic Login" is unchecked so you don't hit any surprises on reboots. If you’re really paranoid, you can even disable things like the IR remote receiver that still exists on some macs and definitely on Macbooks. This would keep pranksters with Apple TV remotes from “Front Rowing” your installation. To disable, go to Security->General->Advanced (in >10.8) and “Disable remote control IR receiver”.
- - **Notification Center:** You can either [disable Notification Center completely](http://www.tekrevue.com/tip/how-to-completely-disable-notification-center-in-mac-os-x/), or set your "Do Not Disturb" to basically on be on forever by setting it with overlapping times like the screenshot below
+ - **デスクトップとスクリーンセーバー：** スクリーンセーバーの「開始までの時間」を「開始しない」に設定して無効化します。また、デスクトップの背景を黒、あるいはあなたのアプリないしはクライアントのロゴ画像にしておくことをおすすめします。 - you can even set these to change automatically - remember - **it's not broken until someone notices** :)
+ - **省エネルギー：**ディスプレイとコンピューターのスリープを「しない」に設定します。また「停電後に自動的に再起動」と「コンピュータが操作不能になった場合に自動的に再起動」を有効にします（これらは OS X 10.7 以降で有効なオプションです）。※[訳注] Yosemite では項目がなくなっています。
+ - **ユーザーとグループ：** 「ログインオプション」の中の「自動ログイン」を「入」に設定します。
+ - **ソフトウェアアップデート：**自動アップデートを無効化します。
+ - **共有：**コンピューターにディスプレイが接続されていないか、または物理的にアクセスできない場所にある場合、「画面共有」と「ファイル共有」をオンにしておくのを忘れないで下さい。この設定をおこなうことで、同じネットワーク上にある別のコンピューターからのアクセスと操作が可能になります（セキュリティ設定に気をつけてください）。
+ - **ネットワーク：**インスタレーションが外部のネットワークまたはインターネットに接続する必要がない場合、Wifi をオフにしておくのは悪い考えではないでしょう。 If you don’t need remote access or don’t need Internet access for the installation, it’s not a bad idea to disable the Wifi so the “please select a wireless network” window doesn’t pop up when you least expect it. You can also turn off the option to ask you to join a new network if the proper one isn't found.
+ - **Bluetooth：** If running without a mouse or keyboard plugged in, sometimes you can get the annoying  ”Bluetooth keyboard/mouse setup” pop up over your application. You can temporality disable these by going to the advanced settings within the Bluetooth Preferences. See below for it’s location in 10.6.
+ - **セキュリティとプライバシー：** I would make sure that "Disable Automatic Login" is unchecked so you don't hit any surprises on reboots. If you’re really paranoid, you can even disable things like the IR remote receiver that still exists on some macs and definitely on Macbooks. This would keep pranksters with Apple TV remotes from “Front Rowing” your installation. To disable, go to Security->General->Advanced (in >10.8) and “Disable remote control IR receiver”.
+ - **通知：** [通知センターを完全に無効化する](http://www.tekrevue.com/tip/how-to-completely-disable-notification-center-in-mac-os-x/)か、下の画像のように「おやすみモード」の時間設定を永遠に持続するよう設定します。
 
 ![BluetoothSettings](images/Bluetooth_settings.png)
 
