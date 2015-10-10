@@ -70,7 +70,8 @@ defaults write com.apple.finder CreateDesktop -bool false
 **ステップ 2：ソフトウェアを起動する**
 -------------------------------
 
-Things get unplugged, power goes out, not everyone has budget or space for a battery backup etc etc. Above, I covered how to have everything reboot automatically after power failures or freezes, but you’ll also need your app to be ready to go from boot and not leave the desktop open to prying eyes. There are many ways to have your application load automatically - the simplest is using OSX's built in tools: In the System Preferences “Accounts” panel, select “Login Items” and drag your application into there to have it open automatically on launch.
+ケーブルが抜けて電源が落ちてしまったりしても、誰もが予備バッテリーを用意できる予算やスペースを持っているわけではありません。
+ステップ1で、停電やフリーズ後にマシン自体を自動で再起動する設定について書きましたが、デスクトップが晒されっぱなしにならないようにアプリケーションの再起動もおこなう必要があります。色々な方法がありますが、もっともシンプルなのは OSX のビルトインツールを使用する方法です。システム環境設定の「ユーザとグループ」から該当のアカウントの「ログイン項目」を開き、あなたのアプリケーションをドラッグ&ドロップします。こうすることでシステム起動時に自動的にアプリケーションが起動します。
 
 ![Login Items](images/Login_items.png)
 
