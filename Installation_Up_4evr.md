@@ -47,35 +47,34 @@ Nick Hardeman 氏がこれらすべての属性値を一度に設定できるユ
 
 ![Notification_Center](images/Notification_Center_disable.png)
 
-また、「アプリケーション◯◯は予期せず終了しました」のダイアログとそれに続くバグリポートメニューを以下のコマンドまたは Problem Reporter.app をリネームすることで無効化できます。
+また、「アプリケーション〜は予期せず終了しました」のダイアログとそれに続くバグリポートメニューを以下のコマンドまたは Problem Reporter.app をリネームすることで無効化できます。
 
 ```bash
 sudo chmod 000 /System/Library/CoreServices/Problem\ Reporter.app
 ```
 
-Another useful tool for modifying certain OSX .plists for disable or enabling certain things is [Tinkertool](http://www.bresink.com/osx/TinkerTool.html) You can use this to disable or enable certain things that System Preferences doesn't cover. 
+[Tinkertool](http://www.bresink.com/osx/TinkerTool.html) もまた OS X の .plist ファイルを変更することでシステム環境設定がカバーしていない様々な設定を有効化/無効化することができます。
 
-I would also look at this filepath and you can rename files in here to temporarily disable them on the computer you're using: /System/Library/CoreServices
+その他にも ```/System/Library/CoreServices``` 内の各ファイルをリネームすることで一時的にその機能を無効化できます。
+たとえば「通知センター」を「通知センター_DEACTIVATE」等にすれば、あのサイテーな通知センターのポップアップが現れることはなくなるでしょう。
 
-You can rename "Notification Center" to "Notification Center_DEACTIVATE" or something (or you can move it) - and then you won't get any obnoxiously "helpful" Notification Center popups.
+OSX 10.9 以降、アップルは App Nap と呼ばれるおかしな機能を有効にしました。これは簡単に言えばアプリケーションがアクティブでないときにリソースの節約をおこなうものですが、問題を引き起こしもします。[こちらのページ](http://www.tekrevue.com/tip/disable-app-nap-os-x-mavericks/)に無効化する方法が記載されています。
 
-After OSX 10.9 - Apple enabled this strange feature called App Nap that detects when an App isn't doing much and makes it use even less resources - could be problematic - [check this page out for how to disable for now](http://www.tekrevue.com/tip/disable-app-nap-os-x-mavericks/)
-
-If necessary, You can also hide all of the desktop icons with this terminal command:
+必要であれば、以下のコマンドでデスクトップアイコンを非表示にできます。
 
 ```bash
 defaults write com.apple.finder CreateDesktop -bool false
 ```
 
 
-**Step 2: Boot into your software**
+**ステップ 2：ソフトウェアを起動する**
 -------------------------------
 
 Things get unplugged, power goes out, not everyone has budget or space for a battery backup etc etc. Above, I covered how to have everything reboot automatically after power failures or freezes, but you’ll also need your app to be ready to go from boot and not leave the desktop open to prying eyes. There are many ways to have your application load automatically - the simplest is using OSX's built in tools: In the System Preferences “Accounts” panel, select “Login Items” and drag your application into there to have it open automatically on launch.
 
 ![Login Items](images/Login_items.png)
 
-**Step 3: Keep it up (champ!)**
+**ステップ 3：Keep it up (champ!)**
 ---------------------------
 
 There are several ways to make sure your application goes up and stays up - 
@@ -152,7 +151,7 @@ Make sure to check the Console.app for any errors that may have come through whe
 
 Applescript is also a very solid choice for doing some more OS specific work in terms of having odd menus clicked or keypresses sent in some order.
 
-**Step 4: Reboot periodically**
+**ステップ 4：定期的な再起動**
 ---------------------------
 
 This one is a little more preventative, or maybe superstitious so hopefully someone can point out a concrete reason why this is a good idea. Depending on your app and the amount of stuff it reaches into, there could be some memory leaks or other OS bugs that you haven’t accounted for. Rebooting every day or week is a good idea to keep everything tidy, system wise.
@@ -173,7 +172,7 @@ If you’d like to just close your programs and re-open them and there is a back
 
 ![AutomatorPause](images/Automator_example.png)
 
-**Step 5: Check in on it from afar.**
+**Step 5: 遠隔地からのチェックイン**
 ---------------------------------
 
 There are a bunch of options here from various paid web services (like [Logmein](http://www.logmein.com/) or [Teamviewer](http://teamviewer.com/)), to VNC (many options for this: [RealVNC](http://realvnc.com/) and Chicken of the VNC tend to come up a bunch) to [SSHing](http://www.mactricksandtips.com/2009/06/ssh-into-your-mac.html). The choice here depends on your comfort level and how much you need to do to perform maintenance from far away. Also - see below for tips on logging the status of your app as an alternative way
@@ -182,7 +181,7 @@ Leaving a Dropbox connected to the computer and your own is super useful for fil
 
 Determining the IP of the machine on a dynamically allocated network can be a pain, especially in screenless/headless installations. To make this a little easier, Robb Godshaw wrote a little Automator Script that says the IP aloud using Text-to-Speech 30 seconds after the computer boots. [Download link on Instructables.](http://www.instructables.com/id/Configuring-a-Mac-for-an-always-on-operation/steps/9)
 
-Step 6: Test, test, test.
+Step 6: テスト、テスト、テスト...
 -------------------------
 
  
