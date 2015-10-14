@@ -80,31 +80,32 @@ defaults write com.apple.finder CreateDesktop -bool false
 
 There are several ways to make sure your application goes up and stays up - 
 
-**Launchd**
+**Launchd デーモン**
 
-Using Launch Daemons is an alternate way to get apps to load on boot and to continuously re-open them if they go down. Launchd plists are very useful alternatives to cron jobs and can be used to run things on a periodic basis or on calendar days. You could achieve similar results with a combination of automator and iCal, but it depends on what you’re comfortable with.
+ローンチデーモンはマシンの起動時にアプリケーションを読み込み、継続的に再起動をおこなうためのまた別の方法です。Launchd plists は cron の代わりとしても非常に有用で、カレンダーのスケジュールに沿って何かを定期的に実行することができます。Automator と iCal の組み合わせでも同様のことがおこなえるので、好きな方法を選ぶとよいでしょう。
 
-Here is an [Apple Doc](http://developer.apple.com/library/mac/#documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html) on using Launch Agents and Launch Daemons in various ways.
+[アップルのドキュメント](http://developer.apple.com/library/mac/#documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html)に Launch Agent と Launch Demon の様々な使い方が記載されています。
 
-The [difference between a Launch Daemon and a Launch Agent](http://techjournal.318.com/general-technology/launchdaemons-vs-launchagents/) (Basically whether you need it to run when a user is logged in or not…for most simple options like launching a regular app, you’ll just want a Launch Agent)
+Launch Demon と Launch Agent の使い分けについては[こちら](http://techjournal.318.com/general-technology/launchdaemons-vs-launchagents/)を参照するとよいでしょう。一般的にはある物事をユーザのログイン時に実行したいかどうかによります。ごく普通のアプリケーションを起動させたい場合は Launch Agent が適しています。
 
-Also note (!) that you may need to point your launch daemon to a file within your .app package, not just the app itself - you have to point it to the file in the MacOS folder inside the .app package (right-click your app and select "Show package Contents") Otherwise you might be wondering why the launchdaemon isn't launching your app.
+デーモンには .app 自身ではなくアプリケーションパッケージ（アプリケーションアイコンを右クリックし「パッケージの内容を表示」を選択します）内の ```Contents/MacOS``` に入っているファイルを指定します。さもないとデーモンがアプリを起動してくれない！とハマることになります。
 
-A launchd example from [admsyn](https://gist.github.com/4140204)
+launchd の例は [admsyn](https://gist.github.com/4140204) を参照するとよいでしょう。
 
-Of course you could make the launchd plist yourself for free from a template like above. You can read all about them with the command "man launchd.plist" typed into terminal to get an idea of what each toggle controls. One quick method to setting up Launchd is to use Lingon ($4.99 in the App Store) or [Lingon X](http://www.peterborgapps.com/lingon/) 
+もちろん、上の gist に載っているテンプレートを使用してあなた自身の launchd 用 .plist を作成しても構いません。ターミナルで ```man launchd.plist``` と入力すればコントロール可能なオプションについてすべての情報が得られます。また、Lingon（App Store で 4.99ドル）もしくは [Lingon X](http://www.peterborgapps.com/lingon/) を使用すれば Launchd の設定がより楽になります。  
+
+[訳注] 現在 App Store で販売されているのは Lingon 3 で、価格は1,200円です。上記 URL では Lingon X 2.0 が10ユーロで販売されています。通常の Lingon と Lingon X の違いについては[こちら](https://www.peterborgapps.com/lingon/#compare)。
  
-
-In Lingon, hit the + to create a new launchd plist. Just make it a standard launch agent. Now Set up your plist like so:
+Lingon で + をクリックすると、基本的なエージェントとなる plist が新規作成されます。この plist を以下のように設定しましょう。
 
 ![LingonSetup](images/LingonSetup.png)
 
+
 One additional/optional thing you can add to this is to put an additional key in the plist for a “Successful Exit”. By adding this, your app won’t re-open when it has detected that it closed normally (ie You just hit escape intentionally, it didn’t crash). Can be useful if you’re trying to check something and OS X won’t stop re-opening the app on you. To easily add this to the key, click the advanced tab and click the checkbox for "Successful exit" - or just add it manually as it in the above screenshot.
 
-**Shell script+Cron Job method**
+**シェルスクリプト + cron ジョブ**
 
-(I got the following super helpful tip from [Kyle McDonald](http://kylemcdonald.net/))
-)
+(以下の非常に有用な tips は [Kyle McDonald](http://kylemcdonald.net/) から得ました。)
 
 This method is sort of deprecated in relation to the launchd method - you can run shell scripts with Lingon and launchd in the same manner as what we've got here. Shell scripting is your best friend. With the help of the script below and an application called CronniX (or use Lingon) , you will be able to use a cronjob to check the system’s list of currently running processes. If your app does not appear on the list, then the script will open it again, otherwise it won’t do anything. Either download the script or type the following into a text editor, replacing Twitter.app with your app’s name and filepath. Don’t forget the “.app” extension in the if statement!:
 
@@ -173,134 +174,143 @@ If you’d like to just close your programs and re-open them and there is a back
 
 ![AutomatorPause](images/Automator_example.png)
 
-**Step 5: 遠隔地からのチェックイン**
+**ステップ5：リモートチェックイン**
 ---------------------------------
 
-There are a bunch of options here from various paid web services (like [Logmein](http://www.logmein.com/) or [Teamviewer](http://teamviewer.com/)), to VNC (many options for this: [RealVNC](http://realvnc.com/) and Chicken of the VNC tend to come up a bunch) to [SSHing](http://www.mactricksandtips.com/2009/06/ssh-into-your-mac.html). The choice here depends on your comfort level and how much you need to do to perform maintenance from far away. Also - see below for tips on logging the status of your app as an alternative way
+[SSH](http://www.mactricksandtips.com/2009/06/ssh-into-your-mac.html) で VNC（[RealVNC](http://realvnc.com/) と Chicken of the VNC がよく併用されます）を使用するための選択肢として [Logmein](http://www.logmein.com/) や [Teamviewer](http://teamviewer.com/) などの Web サービスがあります。どれを選ぶかはあなたにとって使いやすいかどうか、そしてどの程度リモートメンテナンスの必要があるのかによりますが、これらを使わずに後のステップで説明するロギング手法を使用する選択肢もあります。
 
-Leaving a Dropbox connected to the computer and your own is super useful for file swaps between the two computers. Although most remote screensharing services have file sharing built in, Dropbox is just a nice, fairly transparent option.
+インスタレーション用のマシンとあなたの PC との間で Dropbox フォルダを共有しておくと非常に便利です。ほとんどの画面共有サービスもファイル共有機能を持っていますが、Dropbox はただただ最高です。
 
-Determining the IP of the machine on a dynamically allocated network can be a pain, especially in screenless/headless installations. To make this a little easier, Robb Godshaw wrote a little Automator Script that says the IP aloud using Text-to-Speech 30 seconds after the computer boots. [Download link on Instructables.](http://www.instructables.com/id/Configuring-a-Mac-for-an-always-on-operation/steps/9)
+ことディスプレイに画面表示をおこなわないインスタレーションにおいて、DHCP で動的に割り当てられた IP アドレスを確認するのは苦痛以外の何物でもありません。Robb Godshaw はこれを少しでも和らげるため、マシンの起動から30秒後に IP アドレスを読み上げさせる Automator スクリプトを書きました。[Instructables でダウンロードできます](http://www.instructables.com/id/Configuring-a-Mac-for-an-always-on-operation/steps/9)。
 
 Step 6: テスト、テスト、テスト...
 -------------------------
 
- 
-You’ve already tested and perfected your software for the installation, so make sure to test all of the above methods and automatic scripts in as realistic manner as you can before you leave it alone for the first day at school.
+インスタレーションに向けてソフトウェアがばっちり整ったら、できる限り本番を想定した環境でこれまで見てきた方法と自動化のスクリプトをテストしてみましょう。
 
-You can’t account for everything, so don’t beat yourself up if something does eventually happen, but this list will hopefully alleviate a little bit of frustration. Good luck!
+すべての物事を説明できるわけではないので、何かが起こってしまっても自分を責める必要はありません。しかしそのとき、このリストがあなたのフラストレーションを少しでも軽くする役に立てば幸いです。幸運を！
 
 
-Additional Tips: Logging
+おまけ：ロギング
 ------------------------
 
-If you have an installation that runs for weeks or months, you might want a way to keep tabs on it that doesn’t involve remotely logging in and checking on it. A good thing to have would be to have something on the system that writes certain info to a text file (kept on a linked Dropbox), or better write that file to a web server that you can then check.
+数週間〜数ヶ月間運用する場合、リモートログインを必要としない監視方法を用意するとよいでしょう。おすすめは、特定の情報をテキストファイル（リンク済みの Dropbox で管理します）に書き込み、さらにそれを Web でチェックできるようにサーバーへアップロードする方法です。
 
-There are a couple things you can do depending on what you want to know about the state of your installation.
+インスタレーションの状態に関してどんな情報を得たいかによっていくつかの方法があります。
 
-There is a terminal command you can use to get a list of all of the currently running processes on your computer:
+現在走っているプロセスをリストアップするためには以下のコマンドが使用できます。
 
     ps aux (or ps ax)
 
-(more info above ps commands [here](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/ps.1.html))) – Further more you can filter this list to only return applications you’re interested in learning about:
+
+(ps コマンドについての情報は[こちら](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/ps.1.html)) – さらに、特定のアプリケーションに関する情報のみにフィルタリングします。
 
     ps aux | grep "TweetDeck"
     
-This will return a line like this:
+こうすると以下のような結果が得られます。
 
     USER             PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
     laser          71564   0.4  1.7  4010724 140544   ??  S    Sun03PM  14:23.76 /Applications/TweetDeck.app/Contents/MacOS/TweetDeck -psn_0_100544477
     laser          95882   0.0  0.0  2432768    600 s000  S+   12:11PM   0:00.00 grep TweetDeck
 
-Now you have the following useful info: CPU usage, Memory usage (as percentage of total memory), Status, Time Started, Time Up
+CPU 使用量、メモリ使用量(全体に対する割合)、ステータス、起動日時、アップタイム等の情報が得られました。
 
-All that is left is to write this output to a text file, which you can do with a line like this:
+これらを以下のようにしてテキストファイルに書き込みましょう。
 
-    ps aux | grep 'TweetDeck' >> /Users/laser/Dropbox/InstallationLogs/BigImportantInstall/Number6ProcessLog.txt
+    ps aux | grep 'TweetDeck' >> $HOME/Dropbox/InstallationLogs/BigImportantInstall/Number6ProcessLog.txt
 
-This line basically says - tell me the open processes (px aux) - only give me the lines that have "Tweetdeck" in them (grep Tweetdeck) - and then append them to a text file located at this location ( >> path_to_text_file)
+この行の意味は次の通りです。
 
-Now we just need to make this an executable shell script and set it up as a launch daemon or cron job – see above at Step 3 to learn how to run the shell script at a regular interval using Lingon and launchd. If the app isn’t running, it will only return the “grep YourAppName” process which is a good thing to log because if your app isn’t open you won’t know how long it’s been out (nothing will be logged), but having the grep process logged will at least tell you it was checking for it. Grep will also more accurately tell you what time it checked – the other app will only give you a start time and up time.
+- 起動中のプロセスを教えて (```px aux```)
+- "Tweetdeck" を含む行だけちょうだい (```grep 'Tweetdeck'```)
+- そしてそれらをこの場所にあるテキストファイルに書き込んでね (```>> path\_to\_text\_file```)
 
-Let’s also take this one step further and say, hypothetically, that the Triplehead2Go display adapter you have is fairly wonky and you don’t always get the displays or projectors to connect after reboot – or maybe a projector is shutting itself off and disrupting things. Well we can log the currently available resolutions too! Try entering the line below in your own terminal:
+デーモンや cron に設定できるように、これを実行可能なシェルスクリプトにする必要があります。ステップ 3 に戻って Lingon と launchd を使用したスクリプトの定期的な実行方法を思い出しましょう。指定したアプリケーションが起動していない場合、その grep プロセスのみが返ってきます。これを記録しておくのはいいことです。なぜなら、アプリケーションが起ち上がっていなければ何もログが残らないので、その状態がどれだけの時間続いているのか知る術がありません。ですがこの grep プロセスをロギングしておけば、少なくともそれをチェックしたことだけは分かります。また grep コマンドはより正確にチェックした時間を教えてくれます。他のアプリでは起動時間とアップタイムしか得られません。
+
+もう少し突っ込んでみましょう。仮に、接続している Triplehead2Go がかなり不安定で、マシンの再起動後にプロジェクターがオフになっているなどしてディスプレイないしはプロジェクターを必ずしも認識してくれないという状況だとしても、現在有効な解像度をログ出力できるのです！ターミナルに以下の行を入力してみてください。
 
     system_profiler SPDisplaysDataType
     
-This will return a list of connected displays and some metadata about them including resolution and names.
+接続中のディスプレイと、その解像度や名前を含むいくつかのメタデータを返します。
 
-Let’s say you want to make sure you’re running a resolution of 3840×720 at all times…or you want a log of resolution changes. You would do something like:
+常に 3840x720 の解像度で動作していることを確認したいか、解像度が変更されたことを記録したいとします。以下の行を試してみましょう。
 
     system_profiler SPDisplaysDataType | grep Resolution
 
-This will return “Resolution: 3840×720″ which you can combine with the above lines to write it all to a text file. So here would be your shell script file if you wanted to record the currently running processes and the current resolutions:
+"Resolution: 3840×720" が返されます。そして、起動中のプロセスとアクティブな解像度を一緒に記録するシェルスクリプトは以下のようになります。
 
-        \#!/bin/bash
+    #!/bin/bash
     ps aux | grep 'YourAppName' >> /Users/you/filepath/Install6ProcessLog.txt
     system_profiler SPDisplaysDataType | grep Resolution >> /Users/you/Dropbox/Install6ProcessLog.txt
 
-And now you’re feeling excited, maybe you want to grab a fullscreen screenshot at a regular interval too, just to make sure there is no funkiness happening that you can’t see…well you could add this line to the above as well:
+ワクワクしてきましたか？さらに、見えないところでおかしなことが起こっていないか確認するために定期的にスクリーンショットを撮りたくなると思います。そこで次の行を書き加えてみましょう。
 
     screencapture ~/Desktop/$(date +%Y%m%d-%H%M%S).png
 
-This will save a screenshot to the desktop (specify your own file path) with a formatted date and time. You may want to do this every hour instead of every 5 minutes since it’s a big chunk of data and it may cause some issue with your screens. As usual – test before deploying!
+これで指定フォーマットの日時をファイル名としたスクリーンショットがデスクトップに保存されます。パスは必要に応じて変更してください。データ容量が大きい場合は表示に問題が起こることがあるので、5分よりも1時間おきくらいがよいと思います。いつもどおり、デプロイ前にテストしましょう！
 
-Bonus points would be to create an auto-generated table and webpage that takes all of this info and puts it into a nice view that you can use to check all of your installations at a glance.
+さらに付け加えるなら、インスタレーションに関する各種情報の一覧表を生成する Web ページを作っておくと便利です。
 
-If the process logger isn’t enough, we can use what we learned in that process to actually set up a system to email you if something is amiss so you don’t have to manually check it. We can do this all with the command line and internal tools, it’s just a more involved setup. This is going to be fairly general and will need some tuning in your specific case.
+このようなロガーでは不十分な場合はメールアラートが使えます。何らかの不具合をメールで通知するシステムを構築すれば手動でチェックする必要がなくなります。これはコマンドラインと手元のツールで実現できますが、手順はやや複雑です。これから説明するのはごく一般的な手順なので、それぞれの環境に合わせて適宜変更してください。
 
-First you will need to configure postfix so you can easily send emails from the terminal – [follow the instructions here as closely as possible](http://benjaminrojas.net/configuring-postfix-to-send-mail-from-mac-os-x-mountain-lion/)
+まず最初に postfix の設定をしましょう。これで簡単にターミナルからメールを送信できるようになります。[こちらに書いてある手順](http://benjaminrojas.net/configuring-postfix-to-send-mail-from-mac-os-x-mountain-lion/)にできる限り忠実に従ってください。
 
-If you were using a gmail account you would do:
+Gmail を使用している場合、アカウント情報は以下のようになるでしょう。
 
 *InstallationSupport@gmail.com*
 
 *pass: yourpassword*
 
-The line in the passwd file mentioned in the article would be: smtp.gmail.com:587 installationSupport@gmail.com:yourpassword
+記事のステップ1の passwd ファイルは以下のようになります。
 
-Now send a test email to yourself by running: echo “Hello” | mail -s “test” “InstallationSupport@gmail.com”
+*smtp.gmail.com:587 installationSupport@gmail.com:yourpassword*
 
-Second step is to combine this new found ability to send emails from the Terminal with a process to check if your application is still running…something like the below would work with some tweaking for what you’re looking to do:
+さっそくテストしてみましょう。以下のコマンドを実行します。
 
-    \#!/bin/sh
-    if [ $(ps ax | grep -v grep | grep "YourApp.app" | wc -l) -eq 0 ] ; #Replace YourApp.app with your own app's name     
+	echo “Hello” | mail -s “test” “InstallationSupport@gmail.com”
+	
+次にこれをアプリケーションの死活監視をするプロセスと組み合わせます。以下のスクリプトを適宜調整すれば動作するでしょう。
+
+    #!/bin/sh
+    if [ $(ps ax | grep -v grep | grep "YourApp.app" | wc -l) -eq 0 ] ; #"YourApp.app" をあなたのアプリケーション名に置き換えてください     
     then
-            SUBJECT="Shit broke"
-            EMAIL="InstallationSupport" #this is the receiver
-         EMAILMESSAGE="This could be for adding an attachment/logfile"
-         echo "The program isn't open - trying to re-open">$SUBJECT
-         date | mail -s "$SUBJECT" "$EMAIL"  "$EMAILMESSAGE"
+    	SUBJECT="Shit broke"
+    	EMAIL="InstallationSupport" #宛先
+    	EMAILMESSAGE="This could be for adding an attachment/logfile"
+		echo "The program isn't open - trying to re-open">$SUBJECT
+		date | mail -s "$SUBJECT" "$EMAIL"  "$EMAILMESSAGE"
      
-            echo "YourApp not running. Opening..."
+		echo "YourApp not running. Opening..."
      
-        open /Applications/YourApp.app #reopen the app - set this to an exact filepath
+		open /Applications/YourApp.app #reopen the app - set this to an exact filepath
     else
-        echo "YourApp is running"
+		echo "YourApp is running"
     fi
 
-Now you just need to follow the instructions from Step 3 above to set this shell script up to run with launchd – you can check it every 5 minutes and have it email you if it crashed. You could also adapt the If statement to email you if the resolution isn’t right or some other process condition.
+最後に、上記のスクリプトが lanuchd で起動するよう、ステップ3の手順に従ってセットアップする必要があります。5分毎にチェックをおこない、もしもクラッシュしていたらメールを受け取ることができます。必要に応じて if 文の中の条件を変えれば、たとえば解像度の変更をモニタリングすることもできます。
 
-Memory leak murderer
+メモリリークキラー
 --------------------
 
-See [this article](http://blairneal.com/blog/memory-leak-murderer/) about combining the above process with something that kills and restarts an app if it crosses a memory usage threshold
+アプリケーションのメモリ使用量が一定の値を超えた際に再起動をかける手順を上記のプロセスに組み合わせる方法については[こちらの記事](http://blairneal.com/blog/memory-leak-murderer/)が参考になります。
 
-Bonus – if using MadMapper – see [this link](http://blairneal.com/blog/applescript-to-automatically-fullscreen-madmapper-for-installations/) for an AppleScript that will open MadMapper and have it enter fullscreen – and enter “OK” on a pesky dialog box.
+おまけ：MadMapper を使っているなら[この AppleScript](http://blairneal.com/blog/applescript-to-automatically-fullscreen-madmapper-for-installations/) が役に立ちます。MapMapper の起動、フルスクリーン表示メニューの選択、やっかいなダイアログで自動的に "OK" を選択する一連の作業をおこなってくれます
 
-Alternate resources:
+その他のリソース：
 --------------------
 
 **MAC OS X**
-This is an amazing addon for openFrameworks apps that keeps your application open even after a large range of failures: [ofxWatchdog](https://github.com/toolbits/ofxWatchdog
-)
-[http://vormplus.be/blog/article/configuring-mac-os-x-for-interactive-installations](http://vormplus.be/blog/article/configuring-mac-os-x-for-interactive-installations
-)
 
-[Similar guide meant for live visuals/VJing](http://vjforums.info/wiki/setting-up-os-x-for-vjing/)
+[ofxWatchdog](https://github.com/toolbits/ofxWatchdog) はアプリケーションに致命的なエラーが起こった場合でも強制的に再起動をかけ続けてくれる素晴らしいアドオンです。
+This is an amazing addon for openFrameworks apps that keeps your application open even after a large range of failures: [ofxWatchdog](https://github.com/toolbits/ofxWatchdog)
 
-[Nick Hardeman's utility for setting all of these from one location](http://nickhardeman.com/610/openframeworks-configuring-osx-for-a-long-term-installation/)
+[Configuring Mac OS X for Interactive Installations](http://vormplus.be/blog/article/configuring-mac-os-x-for-interactive-installations)
 
-Nick Hardeman's [ofxMacUtils](https://github.com/NickHardeman/ofxMacUtils)
+[ライブビジュアル / VJing 向けの同じような tips 集](http://vjforums.info/wiki/setting-up-os-x-for-vjing/)
+
+[これまで書いてきた設定を一ヵ所でおこなうための Nick Hardeman によるユーティリティ](http://nickhardeman.com/610/openframeworks-configuring-osx-for-a-long-term-installation/)
+
+同じくNick Hardeman による [ofxMacUtils](https://github.com/NickHardeman/ofxMacUtils)
 
 **LINUX**
 
@@ -310,7 +320,8 @@ Nick Hardeman's [ofxMacUtils](https://github.com/NickHardeman/ofxMacUtils)
 
 [https://sfpc.hackpad.com/rPi-run-4-ever-qFgafqYPM54](https://sfpc.hackpad.com/rPi-run-4-ever-qFgafqYPM54)
 
-**WINDOWS:** 
+**WINDOWS** 
+
 If you’re looking for help with this task with Windows, check out this awesome script [StayUp](http://www.bantherewind.com/stayup) from Stephen Schieberl. Also for Windows: http://www.softpedia.com/get/System/File-Management/Restart-on-Crash.shtml and this tool for scripting OS operations on windows http://www.nirsoft.net/utils/nircmd.html 
 
 Check out this great step by step from EVSC: http://www.evsc.net/home/prep-windows-machine-for-fulltime-exhibition-setup
